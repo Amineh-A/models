@@ -82,8 +82,19 @@ def add_softmax_cross_entropy_loss_for_each_scale(scales_to_logits,
           align_corners=True)
 
     scaled_labels = tf.reshape(scaled_labels, shape=[-1])
-    not_ignore_mask = tf.to_float(tf.not_equal(scaled_labels,
-                                               ignore_label)) * loss_weight
+    # not_ignore_mask = tf.to_float(tf.not_equal(scaled_labels,
+    #                                            ignore_label)) * loss_weight
+
+    # todo: change weights
+    irgore_weight = 0
+    label0_weight = 1
+    label1_weight = 10
+
+    not_ignore_mask = \
+        tf.to_float(tf.equal(scaled_labels, 0)) * label0_weight + \
+        tf.to_float(tf.equal(scaled_labels, 1)) * label1_weight + \
+        tf.to_float(tf.equal(scaled_labels, ignore_label)) * irgore_weight
+
     one_hot_labels = tf.one_hot(
         scaled_labels, num_classes, on_value=1.0, off_value=0.0)
 
@@ -156,7 +167,7 @@ def get_model_init_fn(train_logdir,
   tf.logging.info('Initializing model from path: %s', tf_initial_checkpoint)
 
   # Variables that will not be restored.
-  exclude_list = ['global_step']
+  exclude_list = ['global_step', 'logits']
   if not initialize_last_layer:
     exclude_list.extend(last_layers)
 
