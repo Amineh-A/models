@@ -1,6 +1,8 @@
 import pickle
 import matplotlib.image as mpimg
-from scipy import misc
+import imageio
+import numpy as np
+np.set_printoptions(threshold=10000)
 
 def save_images(data, name, path_name):
     for i, img in enumerate(data):
@@ -8,7 +10,7 @@ def save_images(data, name, path_name):
 
 def save_segments(data, name):
     for i, img in enumerate(data):
-        misc.imsave('SegmentationClass/' + name + '_' + str(i) + '.png', img)
+        imageio.imwrite('SegmentationClass/' + name + '_' + str(i) + '.png', img)
 
 
 with open('ID53_DATA_C7_D0_dataset.pkl', 'rb') as file:
@@ -19,15 +21,18 @@ test_gt = data['test_gt']
 train_img = data['train_img']
 train_gt = data['train_gt']
 
-#save_images(test_img, 'test', 'JPEGImages')
-#save_images(train_img, 'train', 'JPEGImages')
+for i, img in enumerate(test_gt):
+    img[test_img[i] == 1] = 255
+
+for i, img in enumerate(train_gt):
+    img[train_img[i] == 1] = 255
+
+
+# save_images(test_img, 'test', 'JPEGImages')
+# save_images(train_img, 'train', 'JPEGImages')
 
 # save_segments(test_gt, 'test')
 # save_segments(train_gt, 'train')
-
-# save_images(test_gt, 'test', 'SegmentationClass')
-# save_images(train_gt, 'train', 'SegmentationClass')
-
 
 # with open('ImageSets/train.txt', 'a') as train_file:
 #     for i in range(len(train_img)):
@@ -36,4 +41,3 @@ train_gt = data['train_gt']
 # with open('ImageSets/test.txt', 'a') as test_file:
 #     for i in range(len(train_img)):
 #         test_file.write('test_' + str(i) + '.png\n')
-
