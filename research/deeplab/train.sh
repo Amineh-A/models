@@ -37,8 +37,10 @@ DIGS_FOLDER="digs"
 cd "${CURRENT_DIR}"
 
 # Set up the working directories.
-INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
-TRAIN_LOGDIR="${WORK_DIR}/log/digs"
+OM_FOLDER="/om/user/amineh/pretrained"
+#INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
+INIT_FOLDER="${OM_FOLDER}/deeplabv3_pascal_trainval/model.ckpt"
+TRAIN_LOGDIR="${OM_FOLDER}/log/digs"
 
 DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
 
