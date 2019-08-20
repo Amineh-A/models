@@ -31,8 +31,8 @@ for i, img in enumerate(train_gt):
 # save_images(test_img, 'test', 'JPEGImages')
 # save_images(train_img, 'train', 'JPEGImages')
 
-# save_segments(test_gt, 'test')
-# save_segments(train_gt, 'train')
+save_segments(test_gt, 'test')
+save_segments(train_gt, 'train')
 
 # with open('ImageSets/train.txt', 'a') as train_file:
 #     for i in range(len(train_img)):

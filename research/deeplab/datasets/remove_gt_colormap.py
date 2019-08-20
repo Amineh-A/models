@@ -29,13 +29,13 @@ import tensorflow as tf
 FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string('original_gt_folder',
-                           './VOCdevkit/VOC2012/SegmentationClass',
+                           './digs/SegmentationClass',
                            'Original ground truth annotations.')
 
 tf.app.flags.DEFINE_string('segmentation_format', 'png', 'Segmentation format.')
 
 tf.app.flags.DEFINE_string('output_dir',
-                           './VOCdevkit/VOC2012/SegmentationClassRaw',
+                           './digs/SegmentationClassRaw',
                            'folder to save modified ground truth annotations.')
 
 
