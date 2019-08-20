@@ -37,7 +37,7 @@ DIGS_FOLDER="digs"
 cd "${CURRENT_DIR}"
 
 # Set up the working directories.
-INIT_FOLDER="${WORK_DIR}/deeplabv3_pascal_trainval/model.ckpt"
+INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
 TRAIN_LOGDIR="${WORK_DIR}/log/digs"
 
 DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
@@ -47,7 +47,7 @@ DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
 NUM_ITERATIONS=10
 python "${WORK_DIR}"/train.py \
   --logtostderr \
-  --training_number_of_steps=3 \
+  --training_number_of_steps=300 \
   --train_split="train" \
   --model_variant="xception_65" \
   --atrous_rates=6 \
