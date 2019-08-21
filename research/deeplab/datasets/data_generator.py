@@ -100,7 +100,6 @@ _DIGS_INFORMATION = DatasetDescriptor(
     splits_to_sizes={
         'train': 1280,
         'test': 1280,
-        'val': 40,
     },
     num_classes=3,
     ignore_label=255,

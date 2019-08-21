@@ -49,7 +49,7 @@ DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
 # From tensorflow/models/research/
 python "${WORK_DIR}"/vis.py \
     --logtostderr \
-    --vis_split="val" \
+    --vis_split="test" \
     --model_variant="xception_65" \
     --atrous_rates=6 \
     --atrous_rates=12 \
@@ -57,10 +57,10 @@ python "${WORK_DIR}"/vis.py \
     --output_stride=16 \
     --decoder_output_stride=4 \
     --vis_crop_size="42, 42" \
+    --fine_tune_batch_norm = True \
     --dataset="digs" \
-    --colormap_type="pascal" \
-    --checkpoint_dir='${TRAIN_LOGDIR}' \
-    --vis_logdir='${VIS_LOGDIR}' \
-    --dataset_dir='${DIGS_DATASET}'
-
+    --checkpoint_dir="${TRAIN_LOGDIR}" \
+    --vis_logdir="${VIS_LOGDIR}" \
+    --dataset_dir="${DIGS_DATASET}" \
+    
 
