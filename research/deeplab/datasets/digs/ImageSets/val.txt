@@ -38,4 +38,3 @@ test_36.png
 test_37.png
 test_38.png
 test_39.png
-test_40.png
