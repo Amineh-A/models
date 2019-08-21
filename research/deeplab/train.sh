@@ -49,7 +49,7 @@ DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
 NUM_ITERATIONS=10
 python "${WORK_DIR}"/train.py \
   --logtostderr \
-  --training_number_of_steps=300 \
+  --training_number_of_steps=1000 \
   --train_split="train" \
   --model_variant="xception_65" \
   --atrous_rates=6 \
@@ -65,4 +65,23 @@ python "${WORK_DIR}"/train.py \
   --dataset_dir="${DIGS_DATASET}" \
   --initialize_last_layer=False \
   --last_layers_contain_logits_only=True \
+
+
+# From tensorflow/models/research/
+python "${WORK_DIR}"/vis.py \
+    --logtostderr \
+    --vis_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --vis_crop_size="42, 42" \
+    --dataset="digs" \
+    --colormap_type="pascal" \
+    --checkpoint_dir='/root/newP/official_tf/models-master/research/deeplab/exp/camvid_train/train' \
+    --vis_logdir='/root/newP/official_tf/models-master/research/deeplab/exp/camvid_train/vis' \
+    --dataset_dir='/root/dataset/CamVid/tfrecord'
+
 
