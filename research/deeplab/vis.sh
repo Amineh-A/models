@@ -49,7 +49,7 @@ DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
 # From tensorflow/models/research/
 python "${WORK_DIR}"/vis.py \
     --logtostderr \
-    --vis_split="test" \
+    --vis_split="val" \
     --model_variant="xception_65" \
     --atrous_rates=6 \
     --atrous_rates=12 \
