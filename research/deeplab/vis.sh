@@ -31,7 +31,7 @@ export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 CURRENT_DIR=$(pwd)
 WORK_DIR="${CURRENT_DIR}/deeplab"
 DATASET_DIR="datasets"
-DIGS_FOLDER="digs"
+POLAR_FOLDER="polar"
 
 # Go back to original directory.
 cd "${CURRENT_DIR}"
@@ -40,10 +40,10 @@ cd "${CURRENT_DIR}"
 OM_FOLDER="/om/user/amineh/pretrained"
 #INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
 INIT_FOLDER="${OM_FOLDER}/deeplabv3_pascal_trainval/model.ckpt"
-TRAIN_LOGDIR="${OM_FOLDER}/log/digs"
-VIS_LOGDIR="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/vis"
+TRAIN_LOGDIR="${OM_FOLDER}/log/polar"
+VIS_LOGDIR="${WORK_DIR}/${DATASET_DIR}/${POLAR_FOLDER}/vis"
 
-DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
+POLAR_DATASET="${WORK_DIR}/${DATASET_DIR}/${POLAR_FOLDER}/tfrecord"
 
 
 # From tensorflow/models/research/
@@ -58,9 +58,9 @@ python "${WORK_DIR}"/vis.py \
     --decoder_output_stride=4 \
     --vis_crop_size="42, 42" \
     --fine_tune_batch_norm = True \
-    --dataset="digs" \
+    --dataset="polar" \
     --checkpoint_dir="${TRAIN_LOGDIR}" \
     --vis_logdir="${VIS_LOGDIR}" \
-    --dataset_dir="${DIGS_DATASET}" \
+    --dataset_dir="${POLAR_DATASET}" \
     
 

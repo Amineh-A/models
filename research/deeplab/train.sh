@@ -31,7 +31,7 @@ export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 CURRENT_DIR=$(pwd)
 WORK_DIR="${CURRENT_DIR}/deeplab"
 DATASET_DIR="datasets"
-DIGS_FOLDER="digs"
+POLAR_FOLDER="polar"
 
 # Go back to original directory.
 cd "${CURRENT_DIR}"
@@ -40,13 +40,12 @@ cd "${CURRENT_DIR}"
 OM_FOLDER="/om/user/amineh/pretrained"
 #INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
 INIT_FOLDER="${OM_FOLDER}/deeplabv3_pascal_trainval/model.ckpt"
-TRAIN_LOGDIR="${OM_FOLDER}/log/digs"
+TRAIN_LOGDIR="${OM_FOLDER}/log/polar"
 
-DIGS_DATASET="${WORK_DIR}/${DATASET_DIR}/${DIGS_FOLDER}/tfrecord"
+POLAR_DATASET="${WORK_DIR}/${DATASET_DIR}/${POLAR_FOLDER}/tfrecord"
 
 
 # Train 10 iterations.
-NUM_ITERATIONS=10
 python "${WORK_DIR}"/train.py \
   --logtostderr \
   --training_number_of_steps=1000 \
@@ -58,11 +57,12 @@ python "${WORK_DIR}"/train.py \
   --output_stride=16 \
   --decoder_output_stride=4 \
   --train_crop_size="42, 42" \
-  --train_batch_size=8 \
-  --dataset="digs" \
+  --train_batch_size=16 \
+  --fine_tune_batch_norm=True \
+  --dataset="polar" \
   --tf_initial_checkpoint="${INIT_FOLDER}" \
   --train_logdir="${TRAIN_LOGDIR}" \
-  --dataset_dir="${DIGS_DATASET}" \
+  --dataset_dir="${POLAR_DATASET}" \
   --initialize_last_layer=False \
   --last_layers_contain_logits_only=True \
 
