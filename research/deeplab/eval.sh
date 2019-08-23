@@ -38,31 +38,24 @@ cd "${CURRENT_DIR}"
 
 # Set up the working directories.
 OM_FOLDER="/om/user/amineh/pretrained"
-#INIT_FOLDER="${WORK_DIR}/saved/deeplabv3_pascal_trainval/model.ckpt"
-INIT_FOLDER="${OM_FOLDER}/deeplabv3_pascal_trainval/model.ckpt"
 TRAIN_LOGDIR="${OM_FOLDER}/log/polar/train"
-
+EVAL_LOGDIR="${OM_FOLDER}/log/polar/eval"
 POLAR_DATASET="${WORK_DIR}/${DATASET_DIR}/${POLAR_FOLDER}/tfrecord"
 
 
-# Train 10 iterations.
-python "${WORK_DIR}"/train.py \
-  --logtostderr \
-  --training_number_of_steps=100 \
-  --train_split="train" \
-  --model_variant="xception_65" \
-  --atrous_rates=6 \
-  --atrous_rates=12 \
-  --atrous_rates=18 \
-  --output_stride=16 \
-  --decoder_output_stride=4 \
-  --train_crop_size="42, 42" \
-  --train_batch_size=16 \
-  --fine_tune_batch_norm=True \
-  --dataset="polar" \
-  --tf_initial_checkpoint="${INIT_FOLDER}" \
-  --train_logdir="${TRAIN_LOGDIR}" \
-  --dataset_dir="${POLAR_DATASET}" \
-  --initialize_last_layer=False \
-  --last_layers_contain_logits_only=True \
-
+# From tensorflow/models/research/
+python ${WORK_DIR}/eval.py \
+    --logtostderr \
+    --eval_split="val" \
+    --model_variant="xception_65" \
+    --atrous_rates=6 \
+    --atrous_rates=12 \
+    --atrous_rates=18 \
+    --output_stride=16 \
+    --decoder_output_stride=4 \
+    --eval_crop_size="42, 42" \
+    --dataset="polar" \
+    --checkpoint_dir="${TRAIN_LOGDIR}" \
+    --eval_logdir="${EVAL_LOGDIR}" \
+    --dataset_dir="${POLAR_DATASET}" \
+    --max_number_of_evaluations=1 \

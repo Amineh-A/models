@@ -21,6 +21,9 @@ import tensorflow as tf
 from deeplab import common
 from deeplab import model
 from deeplab.datasets import data_generator
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = "6"
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
