@@ -22,6 +22,11 @@
 #
 #
 
+BATCH_SIZE=1
+LEARNING_RATE=0.0001
+NUM_ITERATIONS=1
+ALPHA=0.5
+
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
@@ -31,36 +36,26 @@ cd ..
 # Update PYTHONPATH.
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 
-# Set up the working environment.
+# Set up the working directories.
 CURRENT_DIR=$(pwd)
 WORK_DIR="${CURRENT_DIR}/deeplab"
-
-# Go to datasets folder and download PASCAL VOC 2012 segmentation dataset.
 DATASET_FOLDER="datasets"
 POLAR_FOLDER="polar"
-cd "${WORK_DIR}/${DATASET_DIR}"
-
-# Go back to original directory.
-cd "${CURRENT_DIR}"
-
-# Set up the working directories.
-OM_DIR="/om/user/amineh/"
-INIT_FOLDER="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
-EXP_FOLDER="${OM_FOLDER}/exp/polar/test1"
-
-TRAIN_LOGDIR="${EXP_FOLDER}/train"
-EVAL_LOGDIR="${EXP_FOLDER}/eval"
-VIS_LOGDIR="${EXP_FOLDER}/vis"
-EXPORT_DIR="${EXP_FOLDER}/export"
+OM_DIR="/om/user/amineh"
+INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
+EXP_DIR="${OM_DIR}/exp/polar/test1"
+TRAIN_LOGDIR="${EXP_DIR}/train"
+EVAL_LOGDIR="${EXP_DIR}/eval"
+VIS_LOGDIR="${EXP_DIR}/vis"
+EXPORT_DIR="${EXP_DIR}/export"
+mkdir -p "${EXP_DIR}"
 mkdir -p "${TRAIN_LOGDIR}"
 mkdir -p "${EVAL_LOGDIR}"
 mkdir -p "${VIS_LOGDIR}"
 mkdir -p "${EXPORT_DIR}"
-
 POLAR_DATASET="${WORK_DIR}/${DATASET_FOLDER}/${POLAR_FOLDER}/tfrecord"
 
-# Train 10 iterations.
-NUM_ITERATIONS=10
+# Train
 python "${WORK_DIR}"/train.py \
   --logtostderr \
   --train_split="train" \
@@ -71,14 +66,16 @@ python "${WORK_DIR}"/train.py \
   --output_stride=16 \
   --decoder_output_stride=4 \
   --train_crop_size="42, 42" \
-  --train_batch_size=32 \
+  --train_batch_size="${BATCH_SIZE}" \
   --training_number_of_steps="${NUM_ITERATIONS}" \
   --dataset="polar" \
-  --tf_initial_checkpoint="${INIT_FOLDER}/model.ckpt" \
+  --tf_initial_checkpoint="${INIT_DIR}/model.ckpt" \
   --train_logdir="${TRAIN_LOGDIR}" \
   --dataset_dir="${POLAR_DATASET}" \
   --initialize_last_layer=False \
   --last_layers_contain_logits_only=True \
+  --loss_weight_alpha="${ALPHA}" \
+  --base_learning_rate="${LEARNING_RATE}" \
 
 
 # Run evaluation. This performs eval over the full val split (1449 images) and
@@ -86,7 +83,7 @@ python "${WORK_DIR}"/train.py \
 # Using the provided checkpoint, one should expect mIOU=82.20%.
 python "${WORK_DIR}"/eval.py \
   --logtostderr \
-  --eval_split="test" \
+  --eval_split="val" \
   --model_variant="xception_65" \
   --atrous_rates=6 \
   --atrous_rates=12 \
@@ -96,6 +93,7 @@ python "${WORK_DIR}"/eval.py \
   --eval_crop_size="42, 42" \
   --checkpoint_dir="${TRAIN_LOGDIR}" \
   --eval_logdir="${EVAL_LOGDIR}" \
+  --dataset="polar" \
   --dataset_dir="${POLAR_DATASET}" \
   --max_number_of_evaluations=1
 
@@ -112,6 +110,7 @@ python "${WORK_DIR}"/vis.py \
   --vis_crop_size="42, 42" \
   --checkpoint_dir="${TRAIN_LOGDIR}" \
   --vis_logdir="${VIS_LOGDIR}" \
+  --dataset="polar" \
   --dataset_dir="${POLAR_DATASET}" \
   --max_number_of_iterations=1
 
