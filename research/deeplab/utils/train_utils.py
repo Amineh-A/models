@@ -30,7 +30,7 @@ def add_softmax_cross_entropy_loss_for_each_scale(scales_to_logits,
                                                   labels,
                                                   num_classes,
                                                   ignore_label,
-                                                  loss_weight=1.0,
+                                                  loss_weight_alpha=0.5,
                                                   upsample_logits=True,
                                                   hard_example_mining_step=0,
                                                   top_k_percent_pixels=1.0,
@@ -43,7 +43,7 @@ def add_softmax_cross_entropy_loss_for_each_scale(scales_to_logits,
     labels: Groundtruth labels with shape [batch, image_height, image_width, 1].
     num_classes: Integer, number of target classes.
     ignore_label: Integer, label to ignore.
-    loss_weight: Float, loss weight.
+    loss_weight_alpha: Float, outside loss weight, (1.0 - alpha is inside loss weight).
     upsample_logits: Boolean, upsample logits or not.
     hard_example_mining_step: An integer, the training step in which the hard
       exampling mining kicks off. Note that we gradually reduce the mining
@@ -85,10 +85,9 @@ def add_softmax_cross_entropy_loss_for_each_scale(scales_to_logits,
     # not_ignore_mask = tf.to_float(tf.not_equal(scaled_labels,
     #                                            ignore_label)) * loss_weight
 
-    # todo: change weights
     irgore_weight = 0
-    label0_weight = 1
-    label1_weight = 10
+    label0_weight = loss_weight_alpha
+    label1_weight = 1.0 - loss_weight_alpha
 
     not_ignore_mask = \
         tf.to_float(tf.equal(scaled_labels, 0)) * label0_weight + \
