@@ -55,6 +55,7 @@ mkdir -p "${VIS_LOGDIR}"
 mkdir -p "${EXPORT_DIR}"
 POLAR_DATASET="${WORK_DIR}/${DATASET_FOLDER}/${POLAR_FOLDER}/tfrecord"
 
+
 # Train
 python "${WORK_DIR}"/train.py \
   --logtostderr \
@@ -83,7 +84,7 @@ python "${WORK_DIR}"/train.py \
 # Using the provided checkpoint, one should expect mIOU=82.20%.
 python "${WORK_DIR}"/eval.py \
   --logtostderr \
-  --eval_split="val" \
+  --eval_split="" \
   --model_variant="xception_65" \
   --atrous_rates=6 \
   --atrous_rates=12 \
@@ -97,6 +98,7 @@ python "${WORK_DIR}"/eval.py \
   --dataset_dir="${POLAR_DATASET}" \
   --max_number_of_evaluations=1
 
+: '
 # Visualize the results.
 python "${WORK_DIR}"/vis.py \
   --logtostderr \
@@ -133,6 +135,6 @@ python "${WORK_DIR}"/export_model.py \
   --crop_size=42 \
   --dataset="polar" \
   --inference_scales=1.0
-
+'
 # Run inference with the exported checkpoint.
 # Please refer to the provided deeplab_demo.ipynb for an example.

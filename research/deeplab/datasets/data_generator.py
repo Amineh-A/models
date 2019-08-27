@@ -109,8 +109,8 @@ _DIGS_INFORMATION = DatasetDescriptor(
 _POLAR_INFORMATION = DatasetDescriptor(
     splits_to_sizes={
         'train': 200000,
-        'test': 20000,
-        'val': 200,
+        'trainval': 20000,
+        'vis': 200,
     },
     num_classes=3,
     ignore_label=255,
