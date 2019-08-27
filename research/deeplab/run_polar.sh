@@ -22,6 +22,30 @@
 #
 #
 
+
+#for LEARNING_RATE in 0.001 0.0001 0.00001
+#do
+#    for ALPHA in 0.1 0.2 0.4
+#    do
+#        for OUTPUT_STRIDE in 8 16
+#        do
+#            if ($OUTPUT_STRIDE == 8)
+#            then
+#                ATROUS_0=12
+#                ATROUS_1=24
+#                ATROUS_2=36
+#            else
+#                ATROUS_0=6
+#                ATROUS_1=12
+#                ATROUS_2=18
+#            fi
+#            # tarin here
+#            INDEX="${LEARNING_RATE}_${ALPHA}_${OUTPUT_STRIDE}"
+#        done
+#    done
+#done
+
+
 BATCH_SIZE=1
 LEARNING_RATE=0.0001
 NUM_ITERATIONS=1
@@ -41,7 +65,8 @@ CURRENT_DIR=$(pwd)
 WORK_DIR="${CURRENT_DIR}/deeplab"
 DATASET_FOLDER="datasets"
 POLAR_FOLDER="polar"
-OM_DIR="/om/user/amineh"
+#OM_DIR="/om/user/amineh"
+OM_DIR="/Users/amineh.ahm/Desktop/InsideOutside/om"
 INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
 EXP_DIR="${OM_DIR}/exp/polar/test1"
 TRAIN_LOGDIR="${EXP_DIR}/train"
@@ -57,26 +82,26 @@ POLAR_DATASET="${WORK_DIR}/${DATASET_FOLDER}/${POLAR_FOLDER}/tfrecord"
 
 
 # Train
-python "${WORK_DIR}"/train.py \
-  --logtostderr \
-  --train_split="train" \
-  --model_variant="xception_65" \
-  --atrous_rates=6 \
-  --atrous_rates=12 \
-  --atrous_rates=18 \
-  --output_stride=16 \
-  --decoder_output_stride=4 \
-  --train_crop_size="42, 42" \
-  --train_batch_size="${BATCH_SIZE}" \
-  --training_number_of_steps="${NUM_ITERATIONS}" \
-  --dataset="polar" \
-  --tf_initial_checkpoint="${INIT_DIR}/model.ckpt" \
-  --train_logdir="${TRAIN_LOGDIR}" \
-  --dataset_dir="${POLAR_DATASET}" \
-  --initialize_last_layer=False \
-  --last_layers_contain_logits_only=True \
-  --loss_weight_alpha="${ALPHA}" \
-  --base_learning_rate="${LEARNING_RATE}" \
+# python "${WORK_DIR}"/train.py \
+#   --logtostderr \
+#   --train_split="train" \
+#   --model_variant="xception_65" \
+#   --atrous_rates=6 \
+#   --atrous_rates=12 \
+#   --atrous_rates=18 \
+#   --output_stride=16 \
+#   --decoder_output_stride=4 \
+#   --train_crop_size="42, 42" \
+#   --train_batch_size="${BATCH_SIZE}" \
+#   --training_number_of_steps="${NUM_ITERATIONS}" \
+#   --dataset="polar" \
+#   --tf_initial_checkpoint="${INIT_DIR}/model.ckpt" \
+#   --train_logdir="${TRAIN_LOGDIR}" \
+#   --dataset_dir="${POLAR_DATASET}" \
+#   --initialize_last_layer=False \
+#   --last_layers_contain_logits_only=True \
+#   --loss_weight_alpha="${ALPHA}" \
+#   --base_learning_rate="${LEARNING_RATE}" \
 
 
 # Run evaluation. This performs eval over the full val split (1449 images) and
@@ -95,46 +120,46 @@ python "${WORK_DIR}"/eval.py \
   --checkpoint_dir="${TRAIN_LOGDIR}" \
   --eval_logdir="${EVAL_LOGDIR}" \
   --dataset="polar" \
+  --eval_batch_size=$BATCH_SIZE \
   --dataset_dir="${POLAR_DATASET}" \
   --max_number_of_evaluations=1
 
-: '
-# Visualize the results.
-python "${WORK_DIR}"/vis.py \
-  --logtostderr \
-  --vis_split="val" \
-  --model_variant="xception_65" \
-  --atrous_rates=6 \
-  --atrous_rates=12 \
-  --atrous_rates=18 \
-  --output_stride=16 \
-  --decoder_output_stride=4 \
-  --vis_crop_size="42, 42" \
-  --checkpoint_dir="${TRAIN_LOGDIR}" \
-  --vis_logdir="${VIS_LOGDIR}" \
-  --dataset="polar" \
-  --dataset_dir="${POLAR_DATASET}" \
-  --max_number_of_iterations=1
-
-# Export the trained checkpoint.
-CKPT_PATH="${TRAIN_LOGDIR}/model.ckpt-${NUM_ITERATIONS}"
-EXPORT_PATH="${EXPORT_DIR}/frozen_inference_graph.pb"
-
-python "${WORK_DIR}"/export_model.py \
-  --logtostderr \
-  --checkpoint_path="${CKPT_PATH}" \
-  --export_path="${EXPORT_PATH}" \
-  --model_variant="xception_65" \
-  --atrous_rates=6 \
-  --atrous_rates=12 \
-  --atrous_rates=18 \
-  --output_stride=16 \
-  --decoder_output_stride=4 \
-  --num_classes=3 \
-  --crop_size=42 \
-  --crop_size=42 \
-  --dataset="polar" \
-  --inference_scales=1.0
-'
-# Run inference with the exported checkpoint.
-# Please refer to the provided deeplab_demo.ipynb for an example.
+# # Visualize the results.
+# python "${WORK_DIR}"/vis.py \
+#   --logtostderr \
+#   --vis_split="val" \
+#   --model_variant="xception_65" \
+#   --atrous_rates=6 \
+#   --atrous_rates=12 \
+#   --atrous_rates=18 \
+#   --output_stride=16 \
+#   --decoder_output_stride=4 \
+#   --vis_crop_size="42, 42" \
+#   --checkpoint_dir="${TRAIN_LOGDIR}" \
+#   --vis_logdir="${VIS_LOGDIR}" \
+#   --dataset="polar" \
+#   --dataset_dir="${POLAR_DATASET}" \
+#   --max_number_of_iterations=1
+#
+# # Export the trained checkpoint.
+# CKPT_PATH="${TRAIN_LOGDIR}/model.ckpt-${NUM_ITERATIONS}"
+# EXPORT_PATH="${EXPORT_DIR}/frozen_inference_graph.pb"
+#
+# python "${WORK_DIR}"/export_model.py \
+#   --logtostderr \
+#   --checkpoint_path="${CKPT_PATH}" \
+#   --export_path="${EXPORT_PATH}" \
+#   --model_variant="xception_65" \
+#   --atrous_rates=6 \
+#   --atrous_rates=12 \
+#   --atrous_rates=18 \
+#   --output_stride=16 \
+#   --decoder_output_stride=4 \
+#   --num_classes=3 \
+#   --crop_size=42 \
+#   --crop_size=42 \
+#   --dataset="polar" \
+#   --inference_scales=1.0
+#
+# # Run inference with the exported checkpoint.
+# # Please refer to the provided deeplab_demo.ipynb for an example.

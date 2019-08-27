@@ -135,6 +135,7 @@ def main(unused_argv):
           eval_scales=FLAGS.eval_scales,
           add_flipped_images=FLAGS.add_flipped_images)
     predictions = predictions[common.OUTPUT_TYPE]
+    flat_y = tf.cast(tf.reshape(predictions, shape=[-1, int(FLAGS.eval_crop_size[0]) ** 2]), tf.float32)
     predictions = tf.reshape(predictions, shape=[-1])
     labels = tf.reshape(samples[common.LABEL], shape=[-1])
     weights = tf.to_float(tf.not_equal(labels, dataset.ignore_label))
@@ -152,9 +153,32 @@ def main(unused_argv):
       predictions_tag += '_flipped'
 
     # Define the evaluation metric.
-    miou, update_op = tf.metrics.mean_iou(
+    miou, update_op_miou = tf.metrics.mean_iou(
         predictions, labels, dataset.num_of_classes, weights=weights)
-    tf.summary.scalar(predictions_tag, miou)
+    #tf.summary.scalar(predictions_tag, miou)
+
+
+
+    flat_y_ = tf.cast(tf.reshape(samples[common.LABEL], shape=[-1, int(FLAGS.eval_crop_size[0]) **2 ]), tf.float32)
+    mask = tf.cast(tf.equal(tf.zeros_like(flat_y_), flat_y_), tf.float32) + \
+           tf.cast(tf.equal(tf.ones_like(flat_y_), flat_y_), tf.float32)
+
+    flat_output = flat_y
+    correct_prediction = tf.equal(flat_output * mask, flat_y_ * mask)
+    correct_prediction = tf.cast(correct_prediction, tf.float32)
+    error_images = tf.reduce_min(correct_prediction, 1)
+    accuracy, update_op_accuracy = tf.metrics.mean(error_images)
+
+
+    cl = tf.cast(flat_y_, tf.float32)
+    im = tf.cast(mask, tf.float32)
+    accuracy_loose, update_op_accuracy_loose = tf.metrics.mean(
+        0.5 * tf.reduce_sum((im * cl) * correct_prediction) / tf.reduce_sum(im * cl) + \
+        0.5 * tf.reduce_sum((im * (1 - cl)) * correct_prediction) / tf.reduce_sum(im * (1 - cl)))
+
+
+    tf.summary.scalar('accuracy_strict', accuracy)
+    tf.summary.scalar('accuracy_loose', accuracy_loose)
 
     summary_op = tf.summary.merge_all()
     summary_hook = tf.contrib.training.SummaryAtEndHook(
@@ -178,7 +202,7 @@ def main(unused_argv):
     tf.contrib.training.evaluate_repeatedly(
         master=FLAGS.master,
         checkpoint_dir=FLAGS.checkpoint_dir,
-        eval_ops=[update_op],
+        eval_ops=[update_op_miou, update_op_accuracy, update_op_accuracy_loose],
         max_number_of_evaluations=num_eval_iters,
         hooks=hooks,
         eval_interval_secs=FLAGS.eval_interval_secs)
@@ -189,3 +213,4 @@ if __name__ == '__main__':
   flags.mark_flag_as_required('eval_logdir')
   flags.mark_flag_as_required('dataset_dir')
   tf.app.run()
+
