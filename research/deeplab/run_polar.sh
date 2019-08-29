@@ -22,8 +22,8 @@
 #
 #
 
-BATCH_SIZE=128
-NUM_ITERATIONS=1
+BATCH_SIZE=32
+NUM_ITERATIONS=10000
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -43,13 +43,13 @@ OM_DIR="/om/user/amineh"
 #OM_DIR="/Users/amineh.ahm/Desktop/InsideOutside/om"
 INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
 
-for LEARNING_RATE in 0.001 0.0001 0.00001
+for LEARNING_RATE in 0.00001 0.0001 0.001
 do
     for ALPHA in 0.1 0.2 0.4
     do
         for OUTPUT_STRIDE in 8 16
         do
-            if ($OUTPUT_STRIDE == 8)
+            if [ "$OUTPUT_STRIDE" -eq 8 ]
             then
                 ATROUS_0=12
                 ATROUS_1=24
@@ -79,10 +79,10 @@ do
               --logtostderr \
               --train_split="train" \
               --model_variant="xception_65" \
-              --atrous_rates=$ATROUS_0 \
-              --atrous_rates=$ATROUS_1 \
-              --atrous_rates=$ATROUS_2 \
-              --output_stride=$OUTPUT_STRIDE \
+              --atrous_rates="${ATROUS_0}" \
+              --atrous_rates="${ATROUS_1}" \
+              --atrous_rates="${ATROUS_2}" \
+              --output_stride="${OUTPUT_STRIDE}" \
               --decoder_output_stride=4 \
               --train_crop_size="42, 42" \
               --train_batch_size="${BATCH_SIZE}" \
@@ -104,16 +104,16 @@ do
               --logtostderr \
               --eval_split="trainval" \
               --model_variant="xception_65" \
-              --atrous_rates=$ATROUS_0 \
-              --atrous_rates=$ATROUS_1 \
-              --atrous_rates=$ATROUS_2 \
-              --output_stride=$OUTPUT_STRIDE \
+              --atrous_rates="${ATROUS_0}" \
+              --atrous_rates="${ATROUS_1}" \
+              --atrous_rates="${ATROUS_2}" \
+              --output_stride="${OUTPUT_STRIDE}" \
               --decoder_output_stride=4 \
               --eval_crop_size="42, 42" \
               --checkpoint_dir="${TRAIN_LOGDIR}" \
               --eval_logdir="${EVAL_LOGDIR}" \
               --dataset="polar" \
-              --eval_batch_size=2 \
+              --eval_batch_size="${BATCH_SIZE}" \
               --dataset_dir="${POLAR_DATASET}" \
               --max_number_of_evaluations=1
 
@@ -122,10 +122,10 @@ do
               --logtostderr \
               --vis_split="vis" \
               --model_variant="xception_65" \
-              --atrous_rates=$ATROUS_0 \
-              --atrous_rates=$ATROUS_1 \
-              --atrous_rates=$ATROUS_2 \
-              --output_stride=$OUTPUT_STRIDE \
+              --atrous_rates="${ATROUS_0}" \
+              --atrous_rates="${ATROUS_1}" \
+              --atrous_rates="${ATROUS_2}" \
+              --output_stride="${OUTPUT_STRIDE}" \
               --decoder_output_stride=4 \
               --vis_crop_size="42, 42" \
               --checkpoint_dir="${TRAIN_LOGDIR}" \
@@ -143,10 +143,10 @@ do
               --checkpoint_path="${CKPT_PATH}" \
               --export_path="${EXPORT_PATH}" \
               --model_variant="xception_65" \
-              --atrous_rates=$ATROUS_0 \
-              --atrous_rates=$ATROUS_1 \
-              --atrous_rates=$ATROUS_2 \
-              --output_stride=$OUTPUT_STRIDE \
+              --atrous_rates="${ATROUS_0}" \
+              --atrous_rates="${ATROUS_1}" \
+              --atrous_rates="${ATROUS_2}" \
+              --output_stride="${OUTPUT_STRIDE}" \
               --decoder_output_stride=4 \
               --num_classes=3 \
               --crop_size=42 \
