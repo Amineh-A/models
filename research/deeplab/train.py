@@ -84,7 +84,7 @@ flags.DEFINE_enum('learning_policy', 'poly', ['poly', 'step'],
 flags.DEFINE_float('base_learning_rate', .0001,
                    'The base learning rate for model training.')
 
-flags.DEFINE_float('learning_rate_decay_factor', 0.1,
+flags.DEFINE_float('learning_rate_decay_factor', 1,
                    'The rate to decay the base learning rate.')
 
 flags.DEFINE_integer('learning_rate_decay_step', 2000,
@@ -244,6 +244,7 @@ def _build_deeplab(iterator, outputs_to_num_classes, ignore_label):
         samples[common.LABEL],
         num_classes,
         ignore_label,
+        loss_weight=1.0,
         loss_weight_alpha=0.5,
         upsample_logits=FLAGS.upsample_logits,
         hard_example_mining_step=FLAGS.hard_example_mining_step,
