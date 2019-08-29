@@ -24,6 +24,7 @@
 
 BATCH_SIZE=32
 NUM_ITERATIONS=10000
+FOR_COUNTER=0
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -43,7 +44,7 @@ OM_DIR="/om/user/amineh"
 #OM_DIR="/Users/amineh.ahm/Desktop/InsideOutside/om"
 INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
 
-for LEARNING_RATE in 0.00001 0.0001 0.001
+for LEARNING_RATE in 0.0001 0.001
 do
     for ALPHA in 0.1 0.2 0.4
     do
@@ -59,7 +60,13 @@ do
                 ATROUS_1=12
                 ATROUS_2=18
             fi
-            INDEX="${BATCH_SIZE}_${LEARNING_RATE}_${ALPHA}_${OUTPUT_STRIDE}"
+		
+	    FOR_COUNT=$((FOR_COUNT+1))
+            if [ "$FOR_COUNT" -gt 1 ]
+	    then
+		
+
+	    INDEX="${BATCH_SIZE}_${LEARNING_RATE}_${ALPHA}_${OUTPUT_STRIDE}"
 
             EXP_DIR="${OM_DIR}/exp/polar/${INDEX}"
             TRAIN_LOGDIR="${EXP_DIR}/train"
@@ -157,6 +164,7 @@ do
             # Run inference with the exported checkpoint.
             # Please refer to the provided deeplab_demo.ipynb for an example.
 
+	    fi
         done
     done
 done
