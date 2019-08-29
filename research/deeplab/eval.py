@@ -155,7 +155,7 @@ def main(unused_argv):
     # Define the evaluation metric.
     miou, update_op_miou = tf.metrics.mean_iou(
         predictions, labels, dataset.num_of_classes, weights=weights)
-    #tf.summary.scalar(predictions_tag, miou)
+    tf.summary.scalar(predictions_tag, miou)
 
 
 
