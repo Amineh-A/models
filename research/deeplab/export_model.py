@@ -21,6 +21,9 @@ from tensorflow.python.tools import freeze_graph
 from deeplab import common
 from deeplab import input_preprocess
 from deeplab import model
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = "6"
 
 slim = tf.contrib.slim
 flags = tf.app.flags

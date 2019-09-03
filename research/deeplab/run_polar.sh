@@ -23,8 +23,10 @@
 #
 
 BATCH_SIZE=32
-NUM_ITERATIONS=10000
+NUM_ITERATIONS=30000
+
 FOR_COUNTER=0
+DONE_EXPS=0
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -62,13 +64,13 @@ do
             fi
 		
 	    FOR_COUNT=$((FOR_COUNT+1))
-            if [ "$FOR_COUNT" -gt 1 ]
+            if [ "$FOR_COUNT" -gt "$DONE_EXPS" ]
 	    then
 		
 
 	    INDEX="${BATCH_SIZE}_${LEARNING_RATE}_${ALPHA}_${OUTPUT_STRIDE}"
 
-            EXP_DIR="${OM_DIR}/exp/polar/${INDEX}"
+            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_2/${INDEX}"
             TRAIN_LOGDIR="${EXP_DIR}/train"
             EVAL_LOGDIR="${EXP_DIR}/eval"
             VIS_LOGDIR="${EXP_DIR}/vis"

@@ -87,7 +87,7 @@ flags.DEFINE_float('base_learning_rate', .0001,
 flags.DEFINE_float('learning_rate_decay_factor', 1,
                    'The rate to decay the base learning rate.')
 
-flags.DEFINE_integer('learning_rate_decay_step', 2000,
+flags.DEFINE_integer('learning_rate_decay_step', 20000000,
                      'Decay the base learning rate at a fixed step.')
 
 flags.DEFINE_float('learning_power', 0.9,
@@ -245,7 +245,7 @@ def _build_deeplab(iterator, outputs_to_num_classes, ignore_label):
         num_classes,
         ignore_label,
         loss_weight=1.0,
-        loss_weight_alpha=0.5,
+        alpha=0.5,
         upsample_logits=FLAGS.upsample_logits,
         hard_example_mining_step=FLAGS.hard_example_mining_step,
         top_k_percent_pixels=FLAGS.top_k_percent_pixels,
