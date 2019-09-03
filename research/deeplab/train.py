@@ -26,7 +26,7 @@ from deeplab.datasets import data_generator
 from deeplab.utils import train_utils
 import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "6"
+os.environ['CUDA_VISIBLE_DEVICES'] = "5"
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 
@@ -76,7 +76,7 @@ flags.DEFINE_string('profile_logdir', None,
 
 # Settings for training strategy.
 
-flags.DEFINE_enum('learning_policy', 'poly', ['poly', 'step'],
+flags.DEFINE_enum('learning_policy', 'step', ['poly', 'step'],
                   'Learning rate policy for training.')
 
 # Use 0.007 when training on PASCAL augmented training set, train_aug. When

@@ -70,7 +70,7 @@ do
 
 	    INDEX="${BATCH_SIZE}_${LEARNING_RATE}_${ALPHA}_${OUTPUT_STRIDE}"
 
-            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_2/${INDEX}"
+            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_3/${INDEX}"
             TRAIN_LOGDIR="${EXP_DIR}/train"
             EVAL_LOGDIR="${EXP_DIR}/eval"
             VIS_LOGDIR="${EXP_DIR}/vis"

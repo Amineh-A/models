@@ -27,7 +27,7 @@ from deeplab.datasets import data_generator
 from deeplab.utils import save_annotation
 import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "6"
+os.environ['CUDA_VISIBLE_DEVICES'] = "5"
 
 flags = tf.app.flags
 
