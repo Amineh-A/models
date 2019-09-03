@@ -23,12 +23,15 @@ from deeplab import input_preprocess
 from deeplab import model
 import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "6"
+
 
 slim = tf.contrib.slim
 flags = tf.app.flags
 
 FLAGS = flags.FLAGS
+
+flags.DEFINE_string('gpu', "5", 'Which GPU to use.')
+os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 
 flags.DEFINE_string('checkpoint_path', None, 'Checkpoint path')
 

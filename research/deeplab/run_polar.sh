@@ -24,6 +24,7 @@
 
 BATCH_SIZE=32
 NUM_ITERATIONS=30000
+GPU=6
 
 FOR_COUNTER=0
 DONE_EXPS=0
@@ -104,6 +105,7 @@ do
               --last_layers_contain_logits_only=True \
               --loss_weight_alpha="${ALPHA}" \
               --base_learning_rate="${LEARNING_RATE}" \
+              --gpu="${GPU}" \
 
 
             # Run evaluation. This performs eval over the full val split (1449 images) and
@@ -124,7 +126,8 @@ do
               --dataset="polar" \
               --eval_batch_size="${BATCH_SIZE}" \
               --dataset_dir="${POLAR_DATASET}" \
-              --max_number_of_evaluations=1
+              --max_number_of_evaluations=1 \
+              --gpu="${GPU}" \
 
             # Visualize the results.
             python "${WORK_DIR}"/vis.py \
@@ -141,7 +144,8 @@ do
               --vis_logdir="${VIS_LOGDIR}" \
               --dataset="polar" \
               --dataset_dir="${POLAR_DATASET}" \
-              --max_number_of_iterations=1
+              --max_number_of_iterations=1 \
+              --gpu="${GPU}" \
 
             # Export the trained checkpoint.
             CKPT_PATH="${TRAIN_LOGDIR}/model.ckpt-${NUM_ITERATIONS}"
@@ -161,7 +165,8 @@ do
               --crop_size=42 \
               --crop_size=42 \
               --dataset="polar" \
-              --inference_scales=1.0
+              --inference_scales=1.0 \
+              --gpu="${GPU}" \
 
             # Run inference with the exported checkpoint.
             # Please refer to the provided deeplab_demo.ipynb for an example.

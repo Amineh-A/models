@@ -27,11 +27,12 @@ from deeplab.datasets import data_generator
 from deeplab.utils import save_annotation
 import os
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "6"
-
 flags = tf.app.flags
 
 FLAGS = flags.FLAGS
+
+flags.DEFINE_string('gpu', "5", 'Which GPU to use.')
+os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 
 flags.DEFINE_string('master', '', 'BNS name of the tensorflow server')
 
