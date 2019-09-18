@@ -23,6 +23,8 @@ from deeplab import model
 from deeplab.datasets import data_generator
 import os
 
+os.environ['CUDA_VISIBLE_DEVICES'] = "5"
+
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 
