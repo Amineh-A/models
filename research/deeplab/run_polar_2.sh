@@ -23,10 +23,10 @@
 #
 
 BATCH_SIZE=32
-NUM_ITERATIONS=50000
+NUM_ITERATIONS=30000
 
 FOR_COUNTER=0
-DONE_EXPS=0
+DONE_EXPS=4
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -46,11 +46,11 @@ OM_DIR="/om/user/amineh"
 #OM_DIR="/Users/amineh.ahm/Desktop/InsideOutside/om"
 INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
 
-for LEARNING_RATE in 0.01
+for LEARNING_RATE in 0.1
 do
-    for ALPHA in 0.4
+    for ALPHA in 0.1 0.2 0.4
     do
-        for OUTPUT_STRIDE in 8
+        for OUTPUT_STRIDE in 8 16
         do
             if [ "$OUTPUT_STRIDE" -eq 8 ]
             then
@@ -68,9 +68,9 @@ do
 	    then
 		
 
-	    INDEX="${BATCH_SIZE}_0.01_${ALPHA}_${OUTPUT_STRIDE}"
+	    INDEX="${BATCH_SIZE}_0.1_${ALPHA}_${OUTPUT_STRIDE}"
 
-            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_5/${INDEX}"
+            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_6/${INDEX}"
             TRAIN_LOGDIR="${EXP_DIR}/train"
             EVAL_LOGDIR="${EXP_DIR}/eval"
             VIS_LOGDIR="${EXP_DIR}/vis"
