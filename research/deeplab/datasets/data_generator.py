@@ -99,8 +99,8 @@ _ADE20K_INFORMATION = DatasetDescriptor(
 _DIGS_INFORMATION = DatasetDescriptor(
     splits_to_sizes={
         'train': 1280,
-        'test': 1280,
-        'val': 40,
+        'trainval': 1280,
+        'vis': 40,
     },
     num_classes=3,
     ignore_label=255,
