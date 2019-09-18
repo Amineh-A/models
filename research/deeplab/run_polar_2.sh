@@ -26,7 +26,7 @@ BATCH_SIZE=32
 NUM_ITERATIONS=30000
 
 FOR_COUNTER=0
-DONE_EXPS=0
+DONE_EXPS=4
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -46,11 +46,11 @@ OM_DIR="/om/user/amineh"
 #OM_DIR="/Users/amineh.ahm/Desktop/InsideOutside/om"
 INIT_DIR="${OM_DIR}/pretrained/deeplabv3_pascal_trainval"
 
-for LEARNING_RATE in 0.01
+for LEARNING_RATE in 0.1
 do
-    for ALPHA in 0.4
+    for ALPHA in 0.1 0.2 0.4
     do
-        for OUTPUT_STRIDE in 8
+        for OUTPUT_STRIDE in 8 16
         do
             if [ "$OUTPUT_STRIDE" -eq 8 ]
             then
@@ -68,9 +68,9 @@ do
 	    then
 		
 
-	    INDEX="${BATCH_SIZE}_0.01_${ALPHA}_${OUTPUT_STRIDE}"
+	    INDEX="${BATCH_SIZE}_0.1_${ALPHA}_${OUTPUT_STRIDE}"
 
-            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_5/${INDEX}"
+            EXP_DIR="${OM_DIR}/exp/polar_constant_lr_6/${INDEX}"
             TRAIN_LOGDIR="${EXP_DIR}/train"
             EVAL_LOGDIR="${EXP_DIR}/eval"
             VIS_LOGDIR="${EXP_DIR}/vis"
@@ -104,7 +104,6 @@ do
               --last_layers_contain_logits_only=True \
               --loss_weight_alpha="${ALPHA}" \
               --base_learning_rate="${LEARNING_RATE}" \
-              --gpu="${GPU}" \
 
 
             # Run evaluation. This performs eval over the full val split (1449 images) and
@@ -125,8 +124,7 @@ do
               --dataset="polar" \
               --eval_batch_size="${BATCH_SIZE}" \
               --dataset_dir="${POLAR_DATASET}" \
-              --max_number_of_evaluations=1 \
-              --gpu="${GPU}" \
+              --max_number_of_evaluations=1
 
             # Visualize the results.
             python "${WORK_DIR}"/vis.py \
@@ -143,8 +141,7 @@ do
               --vis_logdir="${VIS_LOGDIR}" \
               --dataset="polar" \
               --dataset_dir="${POLAR_DATASET}" \
-              --max_number_of_iterations=1 \
-              --gpu="${GPU}" \
+              --max_number_of_iterations=1
 
             # Export the trained checkpoint.
             CKPT_PATH="${TRAIN_LOGDIR}/model.ckpt-${NUM_ITERATIONS}"
@@ -164,8 +161,7 @@ do
               --crop_size=42 \
               --crop_size=42 \
               --dataset="polar" \
-              --inference_scales=1.0 \
-              --gpu="${GPU}" \
+              --inference_scales=1.0
 
             # Run inference with the exported checkpoint.
             # Please refer to the provided deeplab_demo.ipynb for an example.
